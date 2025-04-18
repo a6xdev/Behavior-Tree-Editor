@@ -1,7 +1,7 @@
 @tool
 extends Window
 
-@onready var behavior_tree_editor: Control = $"../../../../../../.."
+@onready var behavior_tree_editor: Control = $".."
 @onready var action_name: LineEdit = $VBoxContainer/Options/HBoxContainer/ActionName
 @onready var src_path: LineEdit = $VBoxContainer/Options/HBoxContainer/LoadScript/SrcPath
 @onready var file_dialog: FileDialog = $FileDialog

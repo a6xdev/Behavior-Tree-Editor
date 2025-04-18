@@ -1,7 +1,7 @@
 @tool
 extends Control
 
-@onready var add_action_menu: Window = $main/HSplitContainer/BehaviorTreeOptions/VBoxContainer/VBoxContainer/AddAction/AddActionMenu
+@onready var add_action_menu: Window = $AddActionMenu
 @onready var behavior_tree_graph: BehaviorTreeGraph = $main/HSplitContainer/BehaviorTreeGraph
 
 var is_modified:bool = false
@@ -16,8 +16,10 @@ func _input(event: InputEvent) -> void:
 func _process(delta: float) -> void:
 	if has_file:
 		$main/HSplitContainer.show()
+		$main/toolbar/AddMenu.show()
 	else:
 		$main/HSplitContainer.hide()
+		$main/toolbar/AddMenu.hide()
 	
 #endregion
 
@@ -54,7 +56,6 @@ func save_behavior_tree(file_path: String = current_file_path) -> void:
 			var node_data = {
 				"type": _get_node_type(node),
 				"name": node.name,
-				"id": node.name,
 				"position": [node.position_offset.x, node.position_offset.y]
 			}
 			
@@ -84,7 +85,8 @@ func load_behavior_tree(file_path: String) -> void:
 			child.queue_free()
 
 	var node_map := {}
-
+	print(resource.nodes)
+	
 	for node_data in resource.nodes:
 		var node = _create_node_from_data(node_data)
 		if node:
@@ -135,27 +137,16 @@ func _get_node_type(node: Node) -> String:
 	elif node is BehaviorTreeAction:
 		return "Action"
 	return "Unknown"
+	
+func add_node(type):
+	if type:
+		var node = type.new()
+		behavior_tree_graph.add_child(node)
+		is_modified = true
+		_update_window_title()
 #endregion
 
 #region SIGNALS
-func _on_add_root_pressed() -> void:
-	var node = BehaviorTreeRoot.new()
-	behavior_tree_graph.add_child(node)
-	is_modified = true
-	_update_window_title()
-
-func _on_add_sequence_pressed() -> void:
-	var node = BehaviorTreeSequence.new()
-	behavior_tree_graph.add_child(node)
-	is_modified = true
-	_update_window_title()
-
-func _on_add_selector_pressed() -> void:
-	var node = BehaviorTreeSelector.new()
-	behavior_tree_graph.add_child(node)
-	is_modified = true
-	_update_window_title()
-
 func _on_add_action_pressed() -> void:
 	add_action_menu.popup()
 

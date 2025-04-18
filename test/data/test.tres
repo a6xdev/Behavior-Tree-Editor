@@ -1,15 +1,10 @@
 [gd_resource type="Resource" script_class="BehaviorTreeResource" load_steps=2 format=3 uid="uid://cwcuc26ydv21"]
 
-[ext_resource type="Script" uid="uid://d3novijtxigxw" path="res://addons/BehaviorTreeEditor/scripts/core/BehaviorTreeResource.gd" id="1_oeaym"]
+[ext_resource type="Script" uid="uid://d3novijtxigxw" path="res://addons/BehaviorTreeEditor/scripts/core/Resource/BehaviorTreeResource.gd" id="1_oeaym"]
 
 [resource]
 script = ExtResource("1_oeaym")
 nodes = [{
-"id": &"root_",
-"name": &"root_",
-"position": [0.0, 0.0],
-"type": "Root"
-}, {
 "id": &"action_",
 "name": &"action_",
 "position": [240.0, 20.0],
@@ -21,6 +16,11 @@ nodes = [{
 "position": [240.0, 120.0],
 "script": "res://test/scripttest2.gd",
 "type": "Action"
+}, {
+"id": &"root_",
+"name": &"root_",
+"position": [0.0, 0.0],
+"type": "Root"
 }]
 connections = [{
 "from": &"root_",
