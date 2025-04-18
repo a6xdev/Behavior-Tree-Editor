@@ -10,6 +10,7 @@ var ObjectName:Label = Label.new()
 #region Godot Functions
 func _ready() -> void:
 	# Node Config
+	name = "root_"
 	title = "Root"
 	custom_minimum_size = Vector2(150.0, 70.0)
 	set_slot(0, false, 0, Color("#ffffff"), true, 0, Color("#ffffff"), null, null, true)

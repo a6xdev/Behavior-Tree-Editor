@@ -24,15 +24,13 @@ func load_tree(tree:BehaviorTreeResource) -> void:
 		if node_data["type"] == "Root":
 			root_node = node
 		
-	for conn in connections:
+	for conn in tree.connections:
 		var from_node = node_map[conn["from"]]
 		var to_node = node_map[conn["to"]]
-		_connect_nodes(from_node, to_node)
-		
-	for conn in connections:
-		var from_node = node_map[conn["from"]]
-		var to_node = node_map[conn["to"]]
-		_connect_nodes(from_node, to_node)
+		#_connect_nodes(from_node, to_node)
+	
+	connections = tree.connections 
+	nodes = tree.nodes
 
 func _create_node_from_data(node_data: Dictionary) -> Node:
 	var node
@@ -55,12 +53,14 @@ func _create_node_from_data(node_data: Dictionary) -> Node:
 		var script = load(script_path)
 		if script:
 			node.ScriptFile = script
+
 	return node
 
-func _connect_nodes(from_node: Node, to_node: Node) -> void:
-	if from_node and to_node:
-		if from_node is GraphNode and to_node is GraphNode:
-			from_node.add_child(to_node)
+# no need
+#func _connect_nodes(from_node: Node, to_node: Node) -> void:
+	#if from_node and to_node:
+		#if from_node is GraphNode and to_node is GraphNode:
+			#from_node.add_child(to_node)
 
 func _physics_process(delta: float) -> void:
 	if root_node and root_node is BehaviorTreeRoot:

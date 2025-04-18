@@ -166,7 +166,6 @@ filters = PackedStringArray("*.gd")
 
 [node name="BehaviorTreeGraph" parent="main/HSplitContainer" instance=ExtResource("2_kijfw")]
 layout_mode = 2
-scroll_offset = Vector2(-177, 0)
 
 [node name="Files" type="Control" parent="main"]
 layout_mode = 2

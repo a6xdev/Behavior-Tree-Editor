@@ -6,10 +6,12 @@ const STYLE_BOX_SELECTOR = preload("res://addons/BehaviorTreeEditor/assets/style
 const STYLE_BOX_SELECTED = preload("res://addons/BehaviorTreeEditor/assets/styles/nodes/StyleBoxSelected.tres")
 
 var action:Label = Label.new()
+var data:Dictionary
 
 #region Godot Functions
 func _ready() -> void:
 	# Node Config
+	name = "selector_"
 	title = "Selector"
 	custom_minimum_size = Vector2(150.0, 70.0)
 	set_slot(0, true, 0, Color("#ffffff"), true, 0, Color("#ffffff"), null, null, true)
@@ -24,6 +26,16 @@ func _ready() -> void:
 
 #region Calls
 #endregion
+
+func _generate_unique_node_name(base_name: String, existing_names: Array) -> String:
+	var index := 1
+	var candidate := "%s_%02d" % [base_name, index]
+
+	while candidate in existing_names:
+		index += 1
+		candidate = "%s_%02d" % [base_name, index]
+
+	return candidate
 
 #region Signals
 #endregion

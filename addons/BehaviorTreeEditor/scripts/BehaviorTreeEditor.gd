@@ -1,7 +1,7 @@
 @tool
 extends Control
 
-@onready var add_action_menu: Window = $main/HSplitContainer/BehaviorTreeOptions/VBoxContainer/AddAction/AddActionMenu
+@onready var add_action_menu: Window = $main/HSplitContainer/BehaviorTreeOptions/VBoxContainer/VBoxContainer/AddAction/AddActionMenu
 @onready var behavior_tree_graph: BehaviorTreeGraph = $main/HSplitContainer/BehaviorTreeGraph
 
 var is_modified:bool = false
@@ -18,6 +18,7 @@ func _process(delta: float) -> void:
 		$main/HSplitContainer.show()
 	else:
 		$main/HSplitContainer.hide()
+	
 #endregion
 
 #region CALLS
@@ -27,11 +28,15 @@ func _update_window_title():
 		title += "*"
 	$main/toolbar/FileMenu.text = title
 
-func new_behavior_tree():
+func new_behavior_tree(path):
 	for child in behavior_tree_graph.get_children():
 		if child as GraphNode:
 			child.queue_free()
-		
+	
+	var tree_resource = BehaviorTreeResource.new()
+	ResourceSaver.save(tree_resource, path)
+	current_file_path = path
+	
 	has_file = true
 	is_modified = false
 	_update_window_title()
@@ -42,12 +47,14 @@ func save_behavior_tree(file_path: String = current_file_path) -> void:
 		return
 		
 	var tree_resource = BehaviorTreeResource.new()
+	var node_map := {}
 	
 	for node in behavior_tree_graph.get_children():
 		if node is GraphNode:
 			var node_data = {
 				"type": _get_node_type(node),
 				"name": node.name,
+				"id": node.name,
 				"position": [node.position_offset.x, node.position_offset.y]
 			}
 			

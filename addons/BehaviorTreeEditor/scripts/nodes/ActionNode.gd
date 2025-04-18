@@ -11,8 +11,10 @@ enum {RUNNING, SUCESS, FAILURE}
 @export var ActionName:String = "ActionTest"
 
 var action_name_node:Label = Label.new()
+var data:Dictionary
 
 func _ready() -> void:
+	name = "action_"
 	title = ActionName
 	custom_minimum_size = Vector2(150.0, 70.0)
 	set_slot(0, true, 0, Color("#ffffff"), false, 0, Color("#ffffff"), null, null, true)

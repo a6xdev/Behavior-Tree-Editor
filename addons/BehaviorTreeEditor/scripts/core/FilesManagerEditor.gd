@@ -26,7 +26,7 @@ func _file_menu_pressed(id):
 			behavior_tree_editor.save_behavior_tree()
 
 func _on_new_file_selected(path: String) -> void:
-	behavior_tree_editor.new_behavior_tree()
+	behavior_tree_editor.new_behavior_tree(path)
 
 func on_save_file(path:String) -> void:
 	behavior_tree_editor.current_file_path = path
