@@ -18,10 +18,21 @@ func _ready() -> void:
 #region SIGNALS
 func _file_menu_pressed(id):
 	match id:
+		0:
+			new_bt.popup()
+		1:
+			open_bt.popup()
 		3:
-			save_bt.popup()
-		
-func _on_save_file_selected(path: String) -> void:
-	print(path)
+			behavior_tree_editor.save_behavior_tree()
+
+func _on_new_file_selected(path: String) -> void:
+	behavior_tree_editor.new_behavior_tree()
+
+func on_save_file(path:String) -> void:
+	behavior_tree_editor.current_file_path = path
 	behavior_tree_editor.save_behavior_tree(path)
+
+func on_open_file(path: String) -> void:
+	behavior_tree_editor.current_file_path = path
+	behavior_tree_editor.load_behavior_tree(path)
 #endregion

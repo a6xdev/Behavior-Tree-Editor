@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="BehaviorTreeResource" load_steps=2 format=3 uid="uid://dwbfeejc6dk2w"]
+
+[ext_resource type="Script" uid="uid://d3novijtxigxw" path="res://addons/BehaviorTreeEditor/scripts/core/BehaviorTreeResource.gd" id="1_oeaym"]
+
+[resource]
+script = ExtResource("1_oeaym")
+nodes = [{
+"name": &"@GraphNode@26308",
+"position": [0.0, 0.0],
+"type": "Root"
+}, {
+"name": &"@GraphNode@26312",
+"position": [0.0, 0.0],
+"type": "Root"
+}, {
+"name": &"@GraphNode@26316",
+"position": [260.0, 40.0],
+"type": "Sequence"
+}, {
+"name": &"@GraphNode@26320",
+"position": [40.0, 200.0],
+"type": "Root"
+}]
+connections = [{
+"from": &"@GraphNode@26308",
+"to": &"@GraphNode@26316"
+}]

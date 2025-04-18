@@ -10,20 +10,16 @@ var nodes_selected:Array[Node] = []
 #region Calls
 #endregion
 
+func _on_node_selected(node: Node) -> void:
+	nodes_selected.append(node)
+func _on_node_deselected(node: Node) -> void:
+	nodes_selected.erase(node)
+
 func _on_connection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
 	if from_port == to_port:
 		connect_node(from_node, from_port, to_node, to_port)
-
 func _on_disconnection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
 	disconnect_node(from_node, from_port, to_node, to_port)
-
-#region Nodes Selection
-func _on_node_selected(node: Node) -> void:
-	nodes_selected.append(node)
-
-func _on_node_deselected(node: Node) -> void:
-	nodes_selected.erase(node)
-#endregion
 
 #region Features
 func _on_delete_nodes_request(nodes: Array[StringName]) -> void:
