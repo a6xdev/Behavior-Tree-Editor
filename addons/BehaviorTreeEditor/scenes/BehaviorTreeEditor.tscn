@@ -112,7 +112,6 @@ text = "Add Condition"
 
 [node name="BehaviorTreeGraph" parent="main/HSplitContainer" node_paths=PackedStringArray("SelectorUI") instance=ExtResource("2_kijfw")]
 layout_mode = 2
-scroll_offset = Vector2(-177, 0)
 SelectorUI = NodePath("../Sidebar/VBoxContainer/SelectorUI")
 
 [node name="Files" type="Control" parent="main"]
@@ -217,7 +216,7 @@ dialog_close_on_escape = false
 file_mode = 0
 filters = PackedStringArray("*.gd")
 
-[connection signal="text_changed" from="main/HSplitContainer/Sidebar/VBoxContainer/SelectorUI/VBoxContainer/Condition" to="main/HSplitContainer/Sidebar/VBoxContainer/SelectorUI" method="_on_MainCondition_text_changed"]
+[connection signal="text_submitted" from="main/HSplitContainer/Sidebar/VBoxContainer/SelectorUI/VBoxContainer/Condition" to="main/HSplitContainer/Sidebar/VBoxContainer/SelectorUI" method="_on_condition_text_submitted"]
 [connection signal="pressed" from="main/HSplitContainer/Sidebar/VBoxContainer/SelectorUI/VBoxContainer/AddCondition" to="main/HSplitContainer/Sidebar/VBoxContainer/SelectorUI" method="_on_add_condition_pressed"]
 [connection signal="file_selected" from="main/Files/NewBT" to="main/Files" method="_on_new_file_selected"]
 [connection signal="file_selected" from="main/Files/OpenBT" to="main/Files" method="on_open_file"]

@@ -3,6 +3,7 @@ extends Control
 
 @onready var add_action_menu: Window = $AddActionMenu
 @onready var behavior_tree_graph: BehaviorTreeGraph = $main/HSplitContainer/BehaviorTreeGraph
+@onready var selector_ui: PanelContainer = $main/HSplitContainer/Sidebar/VBoxContainer/SelectorUI
 
 var is_modified:bool = false
 var current_file_path:String = ""
@@ -61,12 +62,18 @@ func save_behavior_tree(file_path: String = current_file_path) -> void:
 			
 			if "ScriptFile" in node:
 				node_data["script"] = node.ScriptFile.resource_path
+			
+			if "selector_resource" in node:
+				node_data["selector_resource"] = node.selector_resource
+			
 			tree_resource.nodes.append(node_data)
 			
-	for conn in behavior_tree_graph.connections:
+	for conn in behavior_tree_graph.get_connection_list():  # Usa get_connection_list() para garantir todas as conexões
 		tree_resource.connections.append({
 			"from": conn.from_node,
-			"to": conn.to_node
+			"to": conn.to_node,
+			"from_port": conn.from_port,
+			"to_port": conn.to_port
 		})
 	
 	ResourceSaver.save(tree_resource, file_path)
@@ -85,20 +92,27 @@ func load_behavior_tree(file_path: String) -> void:
 			child.queue_free()
 
 	var node_map := {}
-	print(resource.nodes)
 	
 	for node_data in resource.nodes:
 		var node = _create_node_from_data(node_data)
 		if node:
 			node_map[node_data["name"]] = node
 			node.position_offset = Vector2(node_data["position"][0], node_data["position"][1])
+			
+			if "selector_resource" in node:
+				node.selector_resource = node_data["selector_resource"]
+			
 			behavior_tree_graph.add_child(node)
 
-	for conn in resource.connections:
-		var from_node = node_map.get(conn["from"])
-		var to_node = node_map.get(conn["to"])
+	for conn_data in resource.connections:
+		var from_node = node_map.get(conn_data["from"])
+		var to_node = node_map.get(conn_data["to"])
+		
 		if from_node and to_node:
-			behavior_tree_graph.connect_node(from_node.name, 0, to_node.name, 0)
+			var from_port = conn_data.get("from_port", 0)  # Usa 0 como padrão se não existir
+			var to_port = conn_data.get("to_port", 0)      # Usa 0 como padrão se não existir
+			
+			behavior_tree_graph.connect_node(from_node.name, from_port, to_node.name, to_port)
 	
 	has_file = true
 	is_modified = false

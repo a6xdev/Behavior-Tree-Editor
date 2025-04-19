@@ -1,4 +1,8 @@
 extends Node
 
-func run_action(owner_node):
-	print("action")
+enum state {
+	YES,
+	NO
+}
+
+var current_state:state = state.YES
