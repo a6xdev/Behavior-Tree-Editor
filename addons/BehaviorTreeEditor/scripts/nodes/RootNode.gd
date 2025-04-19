@@ -5,9 +5,11 @@ class_name BehaviorTreeRoot
 const STYLE_BOX_ROOT = preload("res://addons/BehaviorTreeEditor/assets/styles/nodes/StyleBoxRoot.tres")
 const STYLE_BOX_SELECTED = preload("res://addons/BehaviorTreeEditor/assets/styles/nodes/StyleBoxSelected.tres")
 
+enum {RUNNING, SUCCESS, FAILURE}
+
 var ObjectName:Label = Label.new()
 
-#region Godot Functions
+#region GODOT FUNCTIONS
 func _ready() -> void:
 	# Node Config
 	name = "root_"
@@ -20,9 +22,9 @@ func _ready() -> void:
 	# Childs
 	ObjectName.text = "ObjectName"
 	add_child(ObjectName)
-	
 #endregion
 
+#region CALLS
 func execute():
 	var bt_executer:BehaviorTreeExecuter = get_parent()
 	
@@ -31,3 +33,4 @@ func execute():
 			var connected_node = bt_executer.get_node(NodePath(conn.to))
 			if connected_node.has_method("execute"):
 				connected_node.execute()
+#endregion

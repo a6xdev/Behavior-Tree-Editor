@@ -5,7 +5,7 @@ class_name BehaviorTreeAction
 const STYLE_BOX_ACTION = preload("res://addons/BehaviorTreeEditor/assets/styles/nodes/StyleBoxAction.tres")
 const STYLE_BOX_SELECTED = preload("res://addons/BehaviorTreeEditor/assets/styles/nodes/StyleBoxSelected.tres")
 
-enum {RUNNING, SUCESS, FAILURE}
+enum {RUNNING, SUCCESS, FAILURE}
 
 @export var ScriptFile:Script
 @export var ActionName:String = "ActionTest"
@@ -13,6 +13,7 @@ enum {RUNNING, SUCESS, FAILURE}
 var action_name_node:Label = Label.new()
 var data:Dictionary
 
+#region GODOT FUNCTIONS
 func _ready() -> void:
 	name = "action_"
 	title = ActionName
@@ -24,7 +25,9 @@ func _ready() -> void:
 	action_name_node.name = "ActionLabelName"
 	action_name_node.text = ActionName
 	add_child(action_name_node)
+#endregion
 
+#region CALLS
 func execute() -> int:
 	var bt_executer:BehaviorTreeExecuter = get_parent()
 	
@@ -33,12 +36,17 @@ func execute() -> int:
 		return FAILURE
 		
 	var action_instance = ScriptFile.new()
+	var owner_node = bt_executer.owner_node if bt_executer else null
 	
-	if action_instance.has_method("run_action"):
-		action_instance.run_action(bt_executer.owner_node)
-		print("BEHAVIOR_TREE::ACTION_EXECUTE::RUN")
-	else:
-		print("BEHAVIOR_TREE::ACTION_EXECUTE::FAILURE")
-		return FAILURE
-		
-	return SUCESS
+	var result = action_instance.run(self)
+	match result:
+		SUCCESS:
+			action_instance = null
+		FAILURE:
+			action_instance = null
+		RUNNING:
+			# keeps the instance
+			pass
+	
+	return result
+#endregion

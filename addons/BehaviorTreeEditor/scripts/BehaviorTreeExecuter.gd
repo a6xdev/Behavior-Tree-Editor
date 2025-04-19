@@ -1,8 +1,9 @@
 extends Node
 class_name BehaviorTreeExecuter
 
-@export var BehaviorTreeFile:BehaviorTreeResource
 @export var owner_node:Node
+@export var BehaviorTreeFile:BehaviorTreeResource
+
 var root_node : Node = null
 var nodes = {}
 var connections = []
@@ -62,6 +63,8 @@ func create_node_from_data(node_data: Dictionary) -> Node:
 			return null
 	
 	node.position_offset = Vector2(node_data["position"][0], node_data["position"][1])
+	node.visible = false
+	
 	if node_data.has("script"):
 		var script_path = node_data["script"]
 		var script = load(script_path)
