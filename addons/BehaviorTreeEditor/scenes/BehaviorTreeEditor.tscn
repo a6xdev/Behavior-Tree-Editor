@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://fvdsenkhrcsl" path="res://addons/BehaviorTreeEditor/scripts/BehaviorTreeEditor.gd" id="1_xm5du"]
 [ext_resource type="PackedScene" uid="uid://t6anfvcono1r" path="res://addons/BehaviorTreeEditor/scenes/BehaviorTreeGraphic.tscn" id="2_kijfw"]
 [ext_resource type="Script" uid="uid://p8fu2h4q4fb1" path="res://addons/BehaviorTreeEditor/scripts/core/Interface/SelectorUI.gd" id="2_qme1w"]
-[ext_resource type="Script" uid="uid://doqsymhx5lsdf" path="res://addons/BehaviorTreeEditor/scripts/core/AddScriptAction.gd" id="3_jiku1"]
+[ext_resource type="Script" uid="uid://e25keb8bjccg" path="res://addons/BehaviorTreeEditor/scripts/core/Interface/ActionUI.gd" id="3_mwqji"]
 [ext_resource type="Script" uid="uid://du1tnxrh8pmar" path="res://addons/BehaviorTreeEditor/scripts/core/FilesManagerEditor.gd" id="4_d2yt0"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qme1w"]
@@ -64,9 +64,10 @@ popup/item_3/id = 3
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
-split_offset = 165
+split_offset = 160
 
 [node name="Sidebar" type="Panel" parent="main/HSplitContainer"]
+clip_contents = true
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="main/HSplitContainer/Sidebar"]
@@ -102,17 +103,61 @@ layout_mode = 2
 layout_mode = 2
 alignment = 1
 
-[node name="ConditionListLabel" type="Label" parent="main/HSplitContainer/Sidebar/VBoxContainer/SelectorUI/VBoxContainer/ConditionsList"]
-layout_mode = 2
-text = "Condition List"
-
 [node name="AddCondition" type="Button" parent="main/HSplitContainer/Sidebar/VBoxContainer/SelectorUI/VBoxContainer"]
 layout_mode = 2
 text = "Add Condition"
 
-[node name="BehaviorTreeGraph" parent="main/HSplitContainer" node_paths=PackedStringArray("SelectorUI") instance=ExtResource("2_kijfw")]
+[node name="ActionUI" type="PanelContainer" parent="main/HSplitContainer/Sidebar/VBoxContainer"]
+visible = false
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_qme1w")
+script = ExtResource("3_mwqji")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="main/HSplitContainer/Sidebar/VBoxContainer/ActionUI"]
+layout_mode = 2
+
+[node name="title" type="Label" parent="main/HSplitContainer/Sidebar/VBoxContainer/ActionUI/VBoxContainer"]
+layout_mode = 2
+text = "Action Inspector"
+
+[node name="PanelContainer" type="PanelContainer" parent="main/HSplitContainer/Sidebar/VBoxContainer/ActionUI/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="main/HSplitContainer/Sidebar/VBoxContainer/ActionUI/VBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="ActionName" type="LineEdit" parent="main/HSplitContainer/Sidebar/VBoxContainer/ActionUI/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Action Name"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="main/HSplitContainer/Sidebar/VBoxContainer/ActionUI/VBoxContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ScriptPath" type="LineEdit" parent="main/HSplitContainer/Sidebar/VBoxContainer/ActionUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Script Path"
+
+[node name="OpenScript" type="Button" parent="main/HSplitContainer/Sidebar/VBoxContainer/ActionUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Open Script"
+
+[node name="FileDialog" type="FileDialog" parent="main/HSplitContainer/Sidebar/VBoxContainer/ActionUI"]
+title = "Open a File"
+initial_position = 1
+ok_button_text = "Open"
+dialog_close_on_escape = false
+file_mode = 0
+filters = PackedStringArray("*.gd")
+
+[node name="BehaviorTreeGraph" parent="main/HSplitContainer" node_paths=PackedStringArray("bt_editor", "SelectorUI", "ActionUI") instance=ExtResource("2_kijfw")]
+layout_mode = 2
+size_flags_horizontal = 3
+scroll_offset = Vector2(-26, 0)
+bt_editor = NodePath("../../..")
 SelectorUI = NodePath("../Sidebar/VBoxContainer/SelectorUI")
+ActionUI = NodePath("../Sidebar/VBoxContainer/ActionUI")
 
 [node name="Files" type="Control" parent="main"]
 layout_mode = 2
@@ -135,93 +180,15 @@ auto_translate_mode = 1
 initial_position = 2
 filters = PackedStringArray("*.tres ; Behavior Tree Files")
 
-[node name="AddActionMenu" type="Window" parent="."]
-title = "Adicionar Action Node"
-initial_position = 1
-size = Vector2i(369, 100)
-visible = false
-script = ExtResource("3_jiku1")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="AddActionMenu"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 12
-alignment = 1
-
-[node name="Options" type="HBoxContainer" parent="AddActionMenu/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 25
-alignment = 1
-
-[node name="VBoxContainer" type="VBoxContainer" parent="AddActionMenu/VBoxContainer/Options"]
-layout_mode = 2
-theme_override_constants/separation = 3
-alignment = 1
-
-[node name="Label" type="Label" parent="AddActionMenu/VBoxContainer/Options/VBoxContainer"]
-layout_mode = 2
-text = "Nome da Ação:"
-
-[node name="Label2" type="Label" parent="AddActionMenu/VBoxContainer/Options/VBoxContainer"]
-layout_mode = 2
-text = "Script"
-vertical_alignment = 1
-
-[node name="HBoxContainer" type="VBoxContainer" parent="AddActionMenu/VBoxContainer/Options"]
-layout_mode = 2
-alignment = 1
-
-[node name="ActionName" type="LineEdit" parent="AddActionMenu/VBoxContainer/Options/HBoxContainer"]
-custom_minimum_size = Vector2(150, 20)
-layout_mode = 2
-theme_override_font_sizes/font_size = 10
-text = "ActionTest"
-emoji_menu_enabled = false
-
-[node name="LoadScript" type="HBoxContainer" parent="AddActionMenu/VBoxContainer/Options/HBoxContainer"]
-layout_mode = 2
-
-[node name="SrcPath" type="LineEdit" parent="AddActionMenu/VBoxContainer/Options/HBoxContainer/LoadScript"]
-custom_minimum_size = Vector2(150, 0)
-layout_mode = 2
-theme_override_font_sizes/font_size = 10
-
-[node name="OpenScript" type="Button" parent="AddActionMenu/VBoxContainer/Options/HBoxContainer/LoadScript"]
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 2
-theme_override_font_sizes/font_size = 10
-text = "Open Script"
-
-[node name="Buttons" type="HBoxContainer" parent="AddActionMenu/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 28
-alignment = 1
-
-[node name="Create" type="Button" parent="AddActionMenu/VBoxContainer/Buttons"]
-layout_mode = 2
-text = "Create"
-
-[node name="Cancel" type="Button" parent="AddActionMenu/VBoxContainer/Buttons"]
-layout_mode = 2
-text = "Cancel"
-
-[node name="FileDialog" type="FileDialog" parent="AddActionMenu"]
-title = "Open a File"
-initial_position = 1
-ok_button_text = "Open"
-dialog_close_on_escape = false
-file_mode = 0
-filters = PackedStringArray("*.gd")
-
-[connection signal="text_submitted" from="main/HSplitContainer/Sidebar/VBoxContainer/SelectorUI/VBoxContainer/Condition" to="main/HSplitContainer/Sidebar/VBoxContainer/SelectorUI" method="_on_condition_text_submitted"]
+[connection signal="text_change_rejected" from="main/HSplitContainer/Sidebar/VBoxContainer/SelectorUI/VBoxContainer/Condition" to="main/HSplitContainer/Sidebar/VBoxContainer/SelectorUI" method="_main_condition_submitted"]
+[connection signal="text_submitted" from="main/HSplitContainer/Sidebar/VBoxContainer/SelectorUI/VBoxContainer/Condition" to="main/HSplitContainer/Sidebar/VBoxContainer/SelectorUI" method="_main_condition_submitted"]
 [connection signal="pressed" from="main/HSplitContainer/Sidebar/VBoxContainer/SelectorUI/VBoxContainer/AddCondition" to="main/HSplitContainer/Sidebar/VBoxContainer/SelectorUI" method="_on_add_condition_pressed"]
+[connection signal="text_change_rejected" from="main/HSplitContainer/Sidebar/VBoxContainer/ActionUI/VBoxContainer/PanelContainer/VBoxContainer/ActionName" to="main/HSplitContainer/Sidebar/VBoxContainer/ActionUI" method="_action_name_change_rejected"]
+[connection signal="text_submitted" from="main/HSplitContainer/Sidebar/VBoxContainer/ActionUI/VBoxContainer/PanelContainer/VBoxContainer/ActionName" to="main/HSplitContainer/Sidebar/VBoxContainer/ActionUI" method="_action_name_submitted"]
+[connection signal="text_change_rejected" from="main/HSplitContainer/Sidebar/VBoxContainer/ActionUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2/ScriptPath" to="main/HSplitContainer/Sidebar/VBoxContainer/ActionUI" method="_script_path_change_rejected"]
+[connection signal="text_changed" from="main/HSplitContainer/Sidebar/VBoxContainer/ActionUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2/ScriptPath" to="main/HSplitContainer/Sidebar/VBoxContainer/ActionUI" method="_script_path_changed"]
+[connection signal="pressed" from="main/HSplitContainer/Sidebar/VBoxContainer/ActionUI/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer2/OpenScript" to="main/HSplitContainer/Sidebar/VBoxContainer/ActionUI" method="_open_script_pressed"]
+[connection signal="file_selected" from="main/HSplitContainer/Sidebar/VBoxContainer/ActionUI/FileDialog" to="main/HSplitContainer/Sidebar/VBoxContainer/ActionUI" method="_file_selected"]
 [connection signal="file_selected" from="main/Files/NewBT" to="main/Files" method="_on_new_file_selected"]
 [connection signal="file_selected" from="main/Files/OpenBT" to="main/Files" method="on_open_file"]
 [connection signal="file_selected" from="main/Files/SaveBT" to="main/Files" method="on_save_file"]
-[connection signal="close_requested" from="AddActionMenu" to="AddActionMenu" method="_on_close_requested"]
-[connection signal="pressed" from="AddActionMenu/VBoxContainer/Options/HBoxContainer/LoadScript/OpenScript" to="AddActionMenu" method="_on_open_script_pressed"]
-[connection signal="pressed" from="AddActionMenu/VBoxContainer/Buttons/Create" to="AddActionMenu" method="_on_create_pressed"]
-[connection signal="file_selected" from="AddActionMenu/FileDialog" to="AddActionMenu" method="_on_file_dialog_file_selected"]

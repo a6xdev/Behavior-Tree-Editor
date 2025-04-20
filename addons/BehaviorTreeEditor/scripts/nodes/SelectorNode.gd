@@ -8,8 +8,7 @@ const STYLE_BOX_SELECTED = preload("res://addons/BehaviorTreeEditor/assets/style
 enum {RUNNING, SUCCESS, FAILURE}
 
 var action:Label = Label.new()
-var selector_resource := BehaviorTreeSelectorResource.new()
-
+var SelectorResource := BehaviorTreeSelectorResource.new()
 
 #region Godot Functions
 func _ready() -> void:
@@ -17,6 +16,7 @@ func _ready() -> void:
 	name = "selector_"
 	title = "Selector"
 	custom_minimum_size = Vector2(150.0, 0.0)
+	size_flags_vertical = Control.SIZE_EXPAND_FILL
 	add_theme_stylebox_override("titlebar", STYLE_BOX_SELECTOR)
 	add_theme_stylebox_override("titlebar_selected", STYLE_BOX_SELECTED)
 	
@@ -33,6 +33,7 @@ func execute():
 		return
 	
 	var selected_slot = _validate_condition()
+	print(selected_slot)
 	
 	for conn in bt_executer.connections:
 		if conn["from"] == name:
@@ -49,7 +50,6 @@ func execute():
 				var connected_node = bt_executer.get_node_or_null(connected_node_name)
 				
 				if connected_node and connected_node.has_method("execute"):
-					print("aa")
 					connected_node.execute()
 					return
 
@@ -60,11 +60,11 @@ func update_label_list():
 	
 	clear_all_slots()
 	
-	action.text = selector_resource.main_condition
+	action.text = SelectorResource.main_condition
 	set_slot(0, true, 0, Color("#ffffff"), false, 0, Color("#ffffff"), null, null, true)
 	
-	for i in selector_resource.conditions.size():
-		var condition = selector_resource.conditions[i]
+	for i in SelectorResource.conditions.size():
+		var condition = SelectorResource.conditions[i]
 		var label_condition := Label.new()
 		label_condition.name = "selector_condition"
 		label_condition.text = str(condition["condition"]) + " " + str(i + 1)
@@ -73,11 +73,11 @@ func update_label_list():
 		set_slot(i + 1, false, 0, Color("#ffffff"), true, 0, Color("#ffffff"), null, null, true)
 
 func _validate_condition() -> int:
-	var main_condition_var = selector_resource.main_condition
+	var main_condition_var = SelectorResource.main_condition
 	var bt_executer:BehaviorTreeExecuter = get_parent()
 	var owner_node = bt_executer.owner_node
 	
-	if selector_resource.conditions.size() == 0:
+	if SelectorResource.conditions.size() == 0:
 		return 0 
 		
 	if not bt_executer:
@@ -89,7 +89,7 @@ func _validate_condition() -> int:
 		return 0
 	
 	var state_current = owner_node.get(main_condition_var)
-	if state_current < selector_resource.conditions.size():
+	if state_current < SelectorResource.conditions.size():
 		return state_current
 	return 0
 #endregion

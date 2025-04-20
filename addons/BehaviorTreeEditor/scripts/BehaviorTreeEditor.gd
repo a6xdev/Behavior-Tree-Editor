@@ -63,9 +63,11 @@ func save_behavior_tree(file_path: String = current_file_path) -> void:
 			if "ScriptFile" in node:
 				node_data["script"] = node.ScriptFile.resource_path
 			
-			if "selector_resource" in node:
-				node_data["selector_resource"] = node.selector_resource
-			
+			if "SelectorResource" in node:
+				node_data["SelectorResource"] = node.SelectorResource
+			elif "ActionResource" in node:
+				node_data["ActionResource"] = node.ActionResource
+				
 			tree_resource.nodes.append(node_data)
 			
 	for conn in behavior_tree_graph.get_connection_list():  # Usa get_connection_list() para garantir todas as conexões
@@ -99,8 +101,10 @@ func load_behavior_tree(file_path: String) -> void:
 			node_map[node_data["name"]] = node
 			node.position_offset = Vector2(node_data["position"][0], node_data["position"][1])
 			
-			if "selector_resource" in node:
-				node.selector_resource = node_data["selector_resource"]
+			if "SelectorResource" in node:
+				node.SelectorResource = node_data["SelectorResource"]
+			elif "ActionResource" in node:
+				node.ActionResource = node_data["ActionResource"]
 			
 			behavior_tree_graph.add_child(node)
 
@@ -155,20 +159,17 @@ func _get_node_type(node: Node) -> String:
 func add_node(type):
 	if type:
 		var node = type.new()
+		var view_size = behavior_tree_graph.get_rect().size
+		var center_view = view_size / 2
+		var scroll_offset = behavior_tree_graph.scroll_offset
+		var final_position = scroll_offset + center_view
+		
+		node.position_offset = final_position
 		behavior_tree_graph.add_child(node)
+		
 		is_modified = true
 		_update_window_title()
 #endregion
 
 #region SIGNALS
-func _on_add_action_pressed() -> void:
-	add_action_menu.popup()
-
-func add_action_node(script:Script, action_name:String):
-	var node = BehaviorTreeAction.new()
-	node.ScriptFile = script
-	node.ActionName = action_name
-	behavior_tree_graph.add_child(node)
-	is_modified = true
-	_update_window_title()
 #endregion

@@ -7,35 +7,41 @@ const STYLE_BOX_SELECTED = preload("res://addons/BehaviorTreeEditor/assets/style
 
 enum {RUNNING, SUCCESS, FAILURE}
 
-@export var ScriptFile:Script
-@export var ActionName:String = "ActionTest"
-
+var ActionResource := BehaviorTreeActionResource.new()
 var action_name_node:Label = Label.new()
-var data:Dictionary
+var action_script_path:Label = Label.new()
+
+var script_file:Script
 
 #region GODOT FUNCTIONS
 func _ready() -> void:
 	name = "action_"
-	title = ActionName
+	title = "Action"
 	custom_minimum_size = Vector2(150.0, 70.0)
 	set_slot(0, true, 0, Color("#ffffff"), false, 0, Color("#ffffff"), null, null, true)
 	add_theme_stylebox_override("titlebar", STYLE_BOX_ACTION)
 	add_theme_stylebox_override("titlebar_selected", STYLE_BOX_SELECTED)
 	
 	action_name_node.name = "ActionLabelName"
-	action_name_node.text = ActionName
+	action_name_node.text = ActionResource.ActionName
+	
+	action_script_path.name = "ActionScriptPath"
+	action_script_path.text = ActionResource.ActionScriptPath
+	
 	add_child(action_name_node)
+	add_child(action_script_path)
+	print(ActionResource.ActionName)
 #endregion
 
 #region CALLS
 func execute() -> int:
 	var bt_executer:BehaviorTreeExecuter = get_parent()
 	
-	if not ScriptFile:
-		print("No script in: ", name)
+	if not ActionResource.ScriptFile:
+		print("No script: ", ActionResource.ScriptFile)
 		return FAILURE
 		
-	var action_instance = ScriptFile.new()
+	var action_instance = ActionResource.ScriptFile.new()
 	var owner_node = bt_executer.owner_node if bt_executer else null
 	
 	var result = action_instance.run(self)
@@ -49,4 +55,9 @@ func execute() -> int:
 			pass
 	
 	return result
+	
+func update_resource():
+	action_name_node.text = ActionResource.ActionName
+	action_script_path.text = ActionResource.ActionScriptPath
+	print(ActionResource.ScriptFile)
 #endregion

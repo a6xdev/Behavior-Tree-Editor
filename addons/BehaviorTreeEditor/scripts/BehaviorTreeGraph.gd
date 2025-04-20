@@ -2,7 +2,9 @@
 extends GraphEdit
 class_name BehaviorTreeGraph
 
+@export var bt_editor:Control
 @export var SelectorUI:PanelContainer
+@export var ActionUI:PanelContainer
 var nodes_selected:Array[Node] = []
 
 #region Godot Functions
@@ -16,20 +18,30 @@ func _on_node_selected(node: Node) -> void:
 	
 	if node is BehaviorTreeSelector:
 		SelectorUI.selector_node = node
-		SelectorUI.reload_conditions()
+		SelectorUI.reload_interface()
 		SelectorUI.show()
+	elif node is BehaviorTreeAction:
+		ActionUI.ActionNode = node
+		ActionUI.reload_interface()
+		ActionUI.show()
 	
 func _on_node_deselected(node: Node) -> void:
 	nodes_selected.erase(node)
 	
 	if node is BehaviorTreeSelector:
 		SelectorUI.hide()
+	elif node is BehaviorTreeAction:
+		ActionUI.hide()
 
 func _on_connection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
 	#if from_port == to_port:
 	connect_node(from_node, from_port, to_node, to_port)
+	bt_editor.is_modified = true
+	bt_editor._update_window_title()
 func _on_disconnection_request(from_node: StringName, from_port: int, to_node: StringName, to_port: int) -> void:
 	disconnect_node(from_node, from_port, to_node, to_port)
+	bt_editor.is_modified = true
+	bt_editor._update_window_title()
 
 #region Features
 func _on_delete_nodes_request(nodes: Array[StringName]) -> void:
@@ -40,8 +52,11 @@ func _on_delete_nodes_request(nodes: Array[StringName]) -> void:
 		var node = get_node_or_null(NodePath(node_name))
 		if node:
 			node.queue_free()
-			
 			SelectorUI.hide()
+			ActionUI.hide()
+			
+		bt_editor.is_modified = true
+		bt_editor._update_window_title()
 
 func _on_duplicate_nodes_request() -> void:
 	for node in nodes_selected:
@@ -51,4 +66,6 @@ func _on_duplicate_nodes_request() -> void:
 			copy.position_offset += Vector2(40, 40)
 			original.selected = false
 			add_child(copy)
+			bt_editor.is_modified = true
+			bt_editor._update_window_title()
 #endregion

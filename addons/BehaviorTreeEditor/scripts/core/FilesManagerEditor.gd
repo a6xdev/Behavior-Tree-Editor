@@ -35,8 +35,7 @@ func _add_menu_pressed(id):
 		2:
 			behavior_tree_editor.add_node(BehaviorTreeSelector)
 		3:
-			behavior_tree_editor.add_action_menu.popup()
-			#behavior_tree_editor.add_node(BehaviorTreeAction)
+			behavior_tree_editor.add_node(BehaviorTreeAction)
 
 func _on_new_file_selected(path: String) -> void:
 	behavior_tree_editor.new_behavior_tree(path)

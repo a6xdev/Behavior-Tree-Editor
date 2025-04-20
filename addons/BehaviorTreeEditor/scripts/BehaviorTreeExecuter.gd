@@ -53,11 +53,12 @@ func create_node_from_data(node_data: Dictionary) -> Node:
 			node = BehaviorTreeSequence.new()
 		"Selector" :
 			node = BehaviorTreeSelector.new()
-			if node_data.has("selector_resource"):
-				node.selector_resource = node_data["selector_resource"]
-				node.update_label_list()
+			node.SelectorResource = node_data["SelectorResource"]
+			node.update_label_list()
 		"Action" :
 			node = BehaviorTreeAction.new()
+			node.ActionResource = node_data["ActionResource"]
+			node.update_resource()
 		_:
 			print("Node type: ", node_data["type"], " unknown")
 			return null
