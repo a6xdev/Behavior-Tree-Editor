@@ -20,7 +20,7 @@ func _ready() -> void:
 	add_theme_stylebox_override("titlebar_selected", STYLE_BOX_SELECTED)
 	
 	# Childs
-	ObjectName.text = "ObjectName"
+	ObjectName.text = "Root"
 	add_child(ObjectName)
 #endregion
 
